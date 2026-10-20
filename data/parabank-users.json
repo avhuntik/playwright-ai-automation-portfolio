@@ -1,0 +1,28 @@
+[
+  {
+    "username": "ayush_qa_001",
+    "password": "Test@1234",
+    "firstName": "Ayush",
+    "lastName": "Varshney",
+    "address": "123 QA Lane",
+    "city": "New Delhi",
+    "state": "DL",
+    "zip": "110001",
+    "phone": "8285943261",
+    "ssn": "987654321",
+    "description": "Primary test account for e2e registration flow"
+  },
+  {
+    "username": "ayush_qa_002",
+    "password": "Secure@5678",
+    "firstName": "Test",
+    "lastName": "Automation",
+    "address": "456 Playwright Ave",
+    "city": "Gurugram",
+    "state": "HR",
+    "zip": "122001",
+    "phone": "9999888877",
+    "ssn": "123456789",
+    "description": "Secondary account for transfer and bill pay scenarios"
+  }
+]

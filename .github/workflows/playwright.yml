@@ -1,0 +1,102 @@
+name: Playwright CI — AI Automation Portfolio
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+    branches: [main, master]
+  # Allow manual trigger from GitHub Actions tab
+  workflow_dispatch:
+
+jobs:
+  test:
+    name: Run Playwright Tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+
+    steps:
+      # ── Checkout ───────────────────────────────────────────────────────────
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # ── Node.js ────────────────────────────────────────────────────────────
+      - name: Set up Node.js 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      # ── Dependencies ────────────────────────────────────────────────────────
+      - name: Install npm dependencies
+        run: npm ci
+
+      # ── Playwright Browsers ─────────────────────────────────────────────────
+      - name: Install Playwright browsers (Chromium only)
+        run: npx playwright install chromium --with-deps
+
+      # ── Allure CLI ──────────────────────────────────────────────────────────
+      - name: Install Allure CLI
+        run: npm install -g allure-commandline
+
+      # ── Run Tests ────────────────────────────────────────────────────────────
+      - name: Run Playwright UI tests (ParaBank + SauceDemo)
+        run: npx playwright test tests/ui --project=chromium
+        continue-on-error: true
+        env:
+          CI: true
+          PARABANK_BASE_URL:      ${{ secrets.PARABANK_BASE_URL || 'https://parabank.parasoft.com/parabank' }}
+          PARABANK_USERNAME:      ${{ secrets.PARABANK_USERNAME || 'john' }}
+          PARABANK_PASSWORD:      ${{ secrets.PARABANK_PASSWORD || 'demo' }}
+          SAUCEDEMO_BASE_URL:     ${{ secrets.SAUCEDEMO_BASE_URL || 'https://www.saucedemo.com' }}
+          SAUCEDEMO_STANDARD_USER: ${{ secrets.SAUCEDEMO_STANDARD_USER || 'standard_user' }}
+          SAUCEDEMO_PASSWORD:     ${{ secrets.SAUCEDEMO_PASSWORD || 'secret_sauce' }}
+          GEMINI_API_KEY:         ${{ secrets.GEMINI_API_KEY }}
+
+      - name: Run Playwright API tests
+        run: npx playwright test tests/api --project=api
+        continue-on-error: true
+        env:
+          CI: true
+          PARABANK_USERNAME: ${{ secrets.PARABANK_USERNAME || 'john' }}
+          PARABANK_PASSWORD: ${{ secrets.PARABANK_PASSWORD || 'demo' }}
+
+      # ── Generate Allure Report ───────────────────────────────────────────────
+      - name: Generate Allure report
+        if: always()
+        run: allure generate ./allure-results --clean -o ./allure-report
+
+      # ── Upload Allure Report as Artifact ────────────────────────────────────
+      - name: Upload Allure report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: allure-report
+          path: allure-report/
+          retention-days: 30
+
+      # ── Upload Playwright HTML Report ────────────────────────────────────────
+      - name: Upload Playwright HTML report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-html-report
+          path: playwright-report/
+          retention-days: 30
+
+      # ── Upload JUnit XML (for CI dashboards) ─────────────────────────────────
+      - name: Upload JUnit XML results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: junit-results
+          path: test-results/junit-results.xml
+          retention-days: 30
+
+      # ── Upload Test Traces / Screenshots / Videos ─────────────────────────────
+      - name: Upload test artifacts (traces, screenshots)
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-failure-artifacts
+          path: test-results/
+          retention-days: 7

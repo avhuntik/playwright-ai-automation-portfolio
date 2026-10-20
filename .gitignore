@@ -1,0 +1,17 @@
+node_modules/
+dist/
+allure-report/
+allure-results/
+playwright-report/
+test-results/
+blob-report/
+stagehand-browser-data/
+ctrf/
+*.ctrf.json
+
+# Environment — never commit secrets
+.env
+
+# OS artefacts
+.DS_Store
+Thumbs.db

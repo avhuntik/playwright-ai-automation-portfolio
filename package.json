@@ -1,0 +1,42 @@
+{
+  "name": "playwright-ai-automation-portfolio",
+  "version": "1.0.0",
+  "description": "Senior QA portfolio: Playwright + TypeScript + POM + Stagehand AI + Allure — automating ParaBank (banking) and SauceDemo (e-commerce)",
+  "private": true,
+  "scripts": {
+    "install:browsers": "playwright install chromium",
+    "pretest": "echo Running test suite...",
+    "test": "playwright test",
+    "test:parabank": "playwright test tests/ui/parabank --project=chromium",
+    "test:saucedemo": "playwright test tests/ui/saucedemo --project=chromium",
+    "test:api": "playwright test tests/api --project=api",
+    "test:stagehand": "playwright test tests/stagehand --project=chromium",
+    "test:e2e": "playwright test tests/ui/parabank/e2e-banking.spec.ts tests/ui/saucedemo/e2e-purchase.spec.ts --project=chromium",
+    "test:headed": "playwright test --headed",
+    "test:debug": "playwright test --debug",
+    "test:trace": "playwright test --trace on",
+    "allure:generate": "allure generate ./allure-results --clean -o ./allure-report",
+    "allure:open": "allure open ./allure-report",
+    "allure:serve": "allure serve ./allure-results",
+    "report": "playwright show-report",
+    "codegen:parabank": "playwright codegen https://parabank.parasoft.com/parabank/index.htm",
+    "codegen:saucedemo": "playwright codegen https://www.saucedemo.com",
+    "stagehand:banking": "npx tsx stagehand/parabank-ai-flow.ts",
+    "stagehand:shopping": "npx tsx stagehand/saucedemo-ai-flow.ts",
+    "stagehand:banking:headed": "npx tsx stagehand/parabank-ai-flow.ts --headed",
+    "stagehand:shopping:headed": "npx tsx stagehand/saucedemo-ai-flow.ts --headed"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.49.0",
+    "@types/node": "^22.10.0",
+    "allure-commandline": "^2.30.0",
+    "allure-playwright": "^3.0.0",
+    "dotenv": "^16.4.5",
+    "tsx": "^4.19.1",
+    "typescript": "^5.7.2"
+  },
+  "dependencies": {
+    "@browserbasehq/stagehand": "^3.7.3",
+    "zod": "~4.4.3"
+  }
+}

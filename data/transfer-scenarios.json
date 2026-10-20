@@ -1,0 +1,17 @@
+[
+  {
+    "description": "Small transfer — boundary value",
+    "amount": "10",
+    "note": "Minimum threshold transfer test"
+  },
+  {
+    "description": "Medium transfer — typical transaction",
+    "amount": "500",
+    "note": "Standard monthly bill payment simulation"
+  },
+  {
+    "description": "Large transfer — high value",
+    "amount": "1000",
+    "note": "High-value transaction validation"
+  }
+]

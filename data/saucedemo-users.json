@@ -1,0 +1,22 @@
+[
+  {
+    "username": "standard_user",
+    "password": "secret_sauce",
+    "expectedBehaviour": "Login succeeds and inventory page is shown"
+  },
+  {
+    "username": "locked_out_user",
+    "password": "secret_sauce",
+    "expectedBehaviour": "Login fails with 'Sorry, this user has been locked out' error"
+  },
+  {
+    "username": "performance_glitch_user",
+    "password": "secret_sauce",
+    "expectedBehaviour": "Login succeeds but is noticeably slow"
+  },
+  {
+    "username": "error_user",
+    "password": "secret_sauce",
+    "expectedBehaviour": "Login succeeds but certain interactions may fail"
+  }
+]
